@@ -1,68 +1,110 @@
-<html lang="en">
+<!DOCTYPE html>
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>FastFood</title>
-  <!-- materialize icons, css & js -->
+  <title>FastFood - UberEatsCUDEC</title>
+  
   <link type="text/css" href="/css/materialize.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link type="text/css" href="/css/styles.css" rel="stylesheet">
-  <script type="text/javascript" src="/js/materialize.min.js"></script>
+  <script type="text/javascript" src="/js/materialize.min.js" defer></script>
 </head>
 <body class="grey lighten-4">
 
-  <!-- Menu superior -->
   <nav class="z-depth-0">
     <div class="nav-wrapper container">
-      <a href="/">FastFood</span></a>
+      <a href="/">FastFood</a>
       <span class="right grey-text text-darken-1">
-        <i class="material-icons sidenav-trigger" data-target="side-menu">menu</i>
+        <i class="material-icons sidenav-trigger" data-target="side-menu" role="button" aria-label="Abrir menú lateral">menu</i>
       </span>
     </div>
   </nav>
 
-  <!-- Menu lateral -->
   <ul id="side-menu" class="sidenav side-menu">
     <li><a class="subheader">FastFood</a></li>
     <li><a href="/" class="waves-effect">Inicio</a></li>
     <li><a href="/pages/about.html" class="waves-effect">Acerca</a></li>
     <li><div class="divider"></div></li>
-    <li><a href="/pages/contact.html" class="waves-effect">
-      <i class="material-icons">mail_outline</i>Contacto</a>
+    <li>
+      <a href="/pages/contact.html" class="waves-effect">
+        <i class="material-icons">mail_outline</i>Contacto
+      </a>
     </li>
   </ul>
 
-  <!-- Lista de platillos -->
-  <div class="recipes container grey-text text-darken-1">
-    
-  </div>
+  <div class="recipes container grey-text text-darken-1"></div>
 
   <div class="center">
-    <a class="btn-floating btn-small btn-large add-btn sidenav-trigger" data-target="side-form">
+    <a class="btn-floating btn-small btn-large add-btn sidenav-trigger" data-target="side-form" aria-label="Añadir nuevo platillo">
       <i class="material-icons">add</i>
     </a>
   </div>
 
-  <!-- Agregar platillo -->
   <div id="side-form" class="sidenav side-form">
     <form class="add-recipe container section">
-      <h6 >Nuevo platillo</h6>
+      <h6>Nuevo platillo</h6>
       <div class="divider"></div>
       <div class="input-field">
-        <input placeholder="ejemplo: Pizza" id="title" type="text" class="validate">
+        <input placeholder="Ejemplo: Pizza" id="title" type="text" class="validate" required>
         <label for="title">Nombre</label>
       </div>
       <div class="input-field">
-        <input placeholder="e.g. Tofu, mushroom, garlic" id="ingredients" type="text" class="validate">
+        <input placeholder="Ejemplo: Queso, masa, pepperoni" id="ingredients" type="text" class="validate" required>
         <label for="ingredients">Ingredientes</label>
       </div>
       <div class="input-field center">
-        <button class="btn-small">Agregar</button>
+        <button type="submit" class="btn-small">Agregar</button>
       </div>
     </form>
   </div>
 
-  <script src="/js/index.js"></script>
+  <script type="module">
+    /**
+     * Importación de los módulos core, firestore y analytics desde el CDN de gstatic.
+     * CRÍTICO: Se utiliza la misma versión (ej. 10.8.1) para asegurar compatibilidad.
+     */
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-analytics.js";
+    // Añadida la importación de Firestore, ya que el archivo db.js lo requerirá.
+    import { getFirestore } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+    /**
+     * @constant {Object} firebaseConfig
+     * @description Objeto de configuración de Firebase.
+     */
+    const firebaseConfig = {
+      apiKey: "AIzaSyC3zhixRvn3XictflC58KNHLT2K3yWb0d4",
+      authDomain: "fastfood-6a333.firebaseapp.com",
+      projectId: "fastfood-6a333",
+      storageBucket: "fastfood-6a333.firebasestorage.app",
+      messagingSenderId: "443865980845",
+      appId: "1:443865980845:web:24afdf0408d9ab41064b24",
+      measurementId: "G-NM70SSTX56"
+    };
+
+    /**
+     * @type {FirebaseApp}
+     * Inicializa la instancia principal de la aplicación.
+     */
+    const app = initializeApp(firebaseConfig);
+    
+    /**
+     * @type {Analytics}
+     */
+    const analytics = getAnalytics(app);
+
+    /**
+     * @type {Firestore}
+     * Inicializa la instancia de la base de datos Firestore.
+     * Exponemos temporalmente la db al objeto global (window) si tu db.js actual no es un módulo.
+     */
+    const db = getFirestore(app);
+    window.db = db; // Workaround para que db.js pueda acceder a la instancia sin un bundler.
+  </script>
+
+  <script src="/js/index.js" defer></script>
+  <script type="module" src="/js/db.js" defer></script>
 </body>
 </html>
