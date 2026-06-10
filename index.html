@@ -9,15 +9,13 @@
   <link type="text/css" href="/css/materialize.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link type="text/css" href="/css/styles.css" rel="stylesheet">
+  
   <script type="text/javascript" src="/js/materialize.min.js" defer></script>
 </head>
-<body class="grey lighten-4">
-
-  <nav class="z-depth-0">
+<body class="grey lighten-4"> <nav class="z-depth-0">
     <div class="nav-wrapper container">
       <a href="/">FastFood</a>
-      <span class="right grey-text text-darken-1">
-        <i class="material-icons sidenav-trigger" data-target="side-menu" role="button" aria-label="Abrir menú lateral">menu</i>
+      <span class="right grey-text text-darken-1"> <i class="material-icons sidenav-trigger" data-target="side-menu" role="button" aria-label="Abrir menú lateral">menu</i>
       </span>
     </div>
   </nav>
@@ -54,6 +52,10 @@
         <input placeholder="Ejemplo: Queso, masa, pepperoni" id="ingredients" type="text" class="validate" required>
         <label for="ingredients">Ingredientes</label>
       </div>
+        <div class="input-field">
+          <input placeholder="Ejemplo: 150" id="precio" type="number" class="validate" required>
+          <label for="precio">Precio</label>
+      </div>
       <div class="input-field center">
         <button type="submit" class="btn-small">Agregar</button>
       </div>
@@ -62,18 +64,12 @@
 
   <script type="module">
     /**
-     * Importación de los módulos core, firestore y analytics desde el CDN de gstatic.
-     * CRÍTICO: Se utiliza la misma versión (ej. 10.8.1) para asegurar compatibilidad.
+     * Importación estricta de Firebase (Módulos versión 10.8.1).
      */
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-analytics.js";
-    // Añadida la importación de Firestore, ya que el archivo db.js lo requerirá.
     import { getFirestore } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-    /**
-     * @constant {Object} firebaseConfig
-     * @description Objeto de configuración de Firebase.
-     */
     const firebaseConfig = {
       apiKey: "AIzaSyC3zhixRvn3XictflC58KNHLT2K3yWb0d4",
       authDomain: "fastfood-6a333.firebaseapp.com",
@@ -84,24 +80,12 @@
       measurementId: "G-NM70SSTX56"
     };
 
-    /**
-     * @type {FirebaseApp}
-     * Inicializa la instancia principal de la aplicación.
-     */
     const app = initializeApp(firebaseConfig);
-    
-    /**
-     * @type {Analytics}
-     */
     const analytics = getAnalytics(app);
-
-    /**
-     * @type {Firestore}
-     * Inicializa la instancia de la base de datos Firestore.
-     * Exponemos temporalmente la db al objeto global (window) si tu db.js actual no es un módulo.
-     */
     const db = getFirestore(app);
-    window.db = db; // Workaround para que db.js pueda acceder a la instancia sin un bundler.
+    
+    // Inyectar en window temporalmente para debugging en db.js
+    window.db = db;
   </script>
 
   <script src="/js/index.js" defer></script>

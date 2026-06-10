@@ -14,17 +14,18 @@ import { collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.
  * @param {Function} callback - Iteración completa sobre el snapshot.
  */
 onSnapshot(collection(window.db, "platillos"), (coleccion) => {
-  // Limpiamos la consola en cada actualización para no amontonar logs si hay múltiples cambios
-  console.clear();
-  console.log("Estado actual de la colección 'platillos':");
-  
-  /**
-   * Iteramos sobre cada documento (registro) dentro del snapshot actual.
-   * El método .data() extrae el objeto JSON puro (nombre, ingredientes).
-   */
-  coleccion.forEach((registro) => {
-    mostrarPlatillo(registro.data(), registro.id);
+ 
+  coleccion.docChanges().forEach((registro) => {
+    if (registro.type === "added"){
+      mostrarPlatillo(registro.doc.data(), registro.doc.id, registro.doc.data().precio);
+    }
+    if (registro.type === "modified") {
+      actualizarPlatillo(registro.doc.data(), registro.doc.id, registro.doc.data().precio);
+    }
+    if (registro.type === "removed") {
+      eliminarPlatillo(registro.doc.id);
+    }
   });
-});
+})
 
 

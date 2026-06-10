@@ -1,75 +1,141 @@
-/* colours */
-:root{
-  --primary: #FFE9D2;
-  --secondary: #FFE1C4;
-  --title: #FF8816;
+/*
+ * Archivo: style.css
+ * Descripción: Hoja de estilos principal (Light Theme Original).
+ * Refactorizado para mantener la estructura sin alterar la estética base.
+ */
+
+:root {
+  /* Paleta original restaurada */
+  --primary: #000000;
+  --secondary: #464646;
+  --title: #c81111;
+  
+  /* Variables de control de sombras y textos añadidas para consistencia */
+  --shadow-light: rgba(90, 90, 90, 0.1);
+  --shadow-medium: rgba(90, 90, 90, 0.2);
 }
 
-/* layout styles */
-nav{
+/* =========================================
+   Layout Styles
+   ========================================= */
+nav {
   background: var(--primary);
   border-bottom: 10px solid var(--secondary);
 }
-nav a{
+
+nav a {
   text-transform: uppercase;
   color: var(--title);
 }
-nav a span{
+
+nav a span {
   font-weight: bold;
 }
-nav .sidenav-trigger{
+
+nav .sidenav-trigger {
   margin: 0;
+  cursor: pointer;
 }
 
-/* recipe styles */
-.recipes{
+/* =========================================
+   Recipe Styles
+   ========================================= */
+.recipes {
   margin-top: 20px;
 }
-.card-panel.recipe{
+
+.card-panel.recipe {
   border-radius: 8px;
   padding: 10px;
-  box-shadow: 0px 1px 3px rgba(90,90,90,0.1);
+  box-shadow: 0px 1px 3px var(--shadow-light);
   display: grid;
   grid-template-columns: 2fr 6fr 1fr;
   grid-template-areas: "image details delete";
   position: relative;
-}
-.recipe img{
-  grid-area: image;
-  max-width: 60px;
-}
-.recipe-details{
-  grid-area: details;
-  margin-top: 6px;
-}
-.recipe-delete{
-  grid-area: delete;
-  position: absolute;
-  bottom: 0px;
-  right: 0px;
-}
-.recipe-delete i{
-  font-size: 18px;
-}
-.recipe-title{
-  font-weight: bold;
-}
-.recipe-ingredients{
-  font-size: 0.8em;
+  align-items: center; /* Centrado vertical para mejorar la presentación sin imágenes */
 }
 
-/* form-styles */
-.add-btn{
+/* Contenedor temporal para la imagen para evitar que el grid colapse */
+.recipe-image-placeholder {
+  grid-area: image;
+  width: 60px;
+  height: 60px;
+  background-color: var(--secondary);
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--title);
+}
+
+.recipe img {
+  grid-area: image;
+  max-width: 60px;
+  border-radius: 8px;
+}
+
+.recipe-details {
+  grid-area: details;
+  margin-top: 0; /* Ajustado para mejor alineación con el placeholder */
+  padding-left: 10px;
+}
+
+.recipe-title {
+  font-weight: bold;
+  color: #333; /* Contraste base */
+}
+
+.recipe-ingredients {
+  font-size: 0.8em;
+  color: #666;
+}
+
+.recipe-delete {
+  grid-area: delete;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+.recipe-delete i {
+  font-size: 20px; /* Ligeramente más grande para mejor zona táctil */
+  color: #9e9e9e;
+  transition: color 0.2s ease;
+}
+
+.recipe-delete i:hover {
+  color: var(--title); /* Feedback visual con el color de acento */
+}
+
+/* =========================================
+   Form Styles
+   ========================================= */
+.add-btn {
   background: var(--title) !important;
 }
-input{
+
+input {
   box-shadow: none !important;
   -webkit-box-shadow: none !important;
 }
-.side-form button{
-  background: var(--title);
-  box-shadow: 1px 1px 3px rgba(90,90,90,0.2);
+
+/* Corrección de color al hacer focus en los inputs para que haga match con el tema */
+input:focus {
+  border-bottom: 1px solid var(--title) !important;
+  box-shadow: 0 1px 0 0 var(--title) !important;
 }
-form .input-field{
+
+.side-form button {
+  background: var(--title);
+  box-shadow: 1px 1px 3px var(--shadow-medium);
+  border: none;
+  border-radius: 4px;
+  color: rgb(129, 129, 129);
+  font-weight: bold;
+  cursor: pointer;
+}
+
+form .input-field {
   margin-top: 30px;
 }
