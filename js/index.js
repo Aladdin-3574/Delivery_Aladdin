@@ -1,6 +1,7 @@
 /**
  * Archivo: index.js
- * Descripción: Inicialización de Materialize y renderizado de la UI.
+ * Descripción: Inicialización de Materialize y manipulación del DOM.
+ * Refactorizado para exportar sus funciones de manera modular.
  */
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -18,56 +19,52 @@ document.addEventListener('DOMContentLoaded', function() {
  * @param {Object} platillo - Datos provenientes de Firestore.
  * @param {string} id - Identificador del documento.
  */
-function mostrarPlatillo(platillo, id) {
-  /*
-   * SOLUCIÓN ESTRUCTURAL:
-   * Se ha añadido un div 'recipe-image-placeholder' con un icono de Material Icons.
-   * Como tu CSS declara 'grid-template-areas: "image details delete";', si no pasamos 
-   * un elemento para 'image', el grid de CSS colapsa y desalinea los textos.
-   * Cuando agregues imágenes reales, simplemente cambia este div por un tag <img>.
-   */
+// CRÍTICO: Agregamos 'export' para que db.js pueda consumir esta función
+export function mostrarPlatillo(platillo, id) {
   const htmlTemplate = `
-    <div class='card-panel recipe white row' id='${id}'>
-      
+    <div class='card-panel recipe black row' id='${id}' data-id="${id}">
       <div class="recipe-image-placeholder">
         <i class="material-icons">fastfood</i>
       </div>
-
       <div class='recipe-details'>
         <div class='recipe-title'>${platillo.nombre || platillo.title}</div>
         <div class='recipe-ingredients'>#Ingredientes: ${platillo.ingredientes}</div>
         <div class='recipe-price'>#Precio: $${platillo.precio}</div>
       </div>
-
       <div class='recipe-delete'>
         <i class='material-icons' data-id="${id}">delete_outline</i>
       </div>
-      
     </div>
   `;
 
   const container = document.querySelector('.recipes');
-  function actualizarPlatillo(platillo, id) {
-    const card = document.querySelector(`.card-panel[data-id="${id}"]`);
-    if (card) {
-      card.querySelector('.recipe-title').textContent = platillo.nombre || platillo.title;
-      card.querySelector('.recipe-ingredients').textContent = `#Ingredientes: ${platillo.ingredientes}`;
-      card.querySelector('.recipe-price').textContent = `#Precio: $${platillo.precio}`;
-    }
-  }
-
-  function eliminarPlatillo(id) {
-    const card = document.querySelector(`.card-panel[data-id="${id}"]`);
-    if (card) {
-      card.remove();
-    }
-  }  
   
-  /* * OPTIMIZACIÓN DE RENDIMIENTO:
-   * Mantenemos insertAdjacentHTML. Reemplazar innerHTML previene el "re-pintado" 
-   * total del DOM, fundamental cuando debugeas flujos de datos en tiempo real.
-   */
   if (container) {
     container.insertAdjacentHTML('beforeend', htmlTemplate);
+  }
+}
+
+/**
+ * Actualiza los nodos de texto de un platillo existente.
+ */
+export function actualizarPlatillo(platillo, id) {
+  // Buscamos la tarjeta usando el atributo data-id en lugar del ID directo para ser más precisos
+  const card = document.querySelector(`.recipe[data-id="${id}"]`);
+  if (card) {
+    card.querySelector('.recipe-title').textContent = platillo.nombre || platillo.title;
+    card.querySelector('.recipe-ingredients').textContent = `#Ingredientes: ${platillo.ingredientes}`;
+    card.querySelector('.recipe-price').textContent = `#Precio: $${platillo.precio}`;
+  }
+}
+
+/**
+ * Remueve el elemento del árbol DOM.
+ * @param {string} id - ID del documento en Firebase.
+ */
+// Renombrado de borrarPlatillo a eliminarPlatillo para hacer match con db.js
+export const eliminarPlatillo = (id) => {
+  const platillo = document.querySelector(`.recipe[data-id="${id}"]`);
+  if (platillo) {
+    platillo.remove();
   }
 }
