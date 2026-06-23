@@ -4,20 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>FastFood - UberEatsCUDEC</title>
+  <title>Generar Pedido - FastFood</title>
   
   <link type="text/css" href="/css/materialize.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link type="text/css" href="/css/styles.css" rel="stylesheet">
-  
   <script type="text/javascript" src="/js/materialize.min.js" defer></script>
 </head>
-<body class="grey darken-4"> 
+<body class="grey darken-4">
+
   <nav class="z-depth-0">
     <div class="nav-wrapper container">
       <a href="/">FastFood</a>
-      <span class="right grey-text text-lighten-2"> 
-        <i class="material-icons sidenav-trigger" data-target="side-menu" role="button" aria-label="Abrir menú lateral">menu</i>
+      <span class="right grey-text text-lighten-2">
+        <i class="material-icons sidenav-trigger" data-target="side-menu" role="button" aria-label="Abrir menú">menu</i>
       </span>
     </div>
   </nav>
@@ -28,46 +28,44 @@
     <li><a href="/pages/about.html" class="waves-effect">Acerca</a></li>
     <li><a href="/pages/pedidos.html" class="waves-effect">Generar pedido</a></li>
     <li><div class="divider"></div></li>
-    <li>
-      <a href="/pages/contact.html" class="waves-effect">
-        <i class="material-icons">mail_outline</i>Contacto
-      </a>
-    </li>
+    <li><a href="/pages/contact.html" class="waves-effect"><i class="material-icons">mail_outline</i>Contacto</a></li>
   </ul>
 
-  <div class="recipes container grey-text text-lighten-2"></div>
-
-  <div class="center">
-    <a class="btn-floating btn-small btn-large add-btn sidenav-trigger" data-target="side-form" aria-label="Añadir nuevo platillo">
-      <i class="material-icons">add</i>
-    </a>
-  </div>
-
-  <div id="side-form" class="sidenav side-form">
-    <form class="add-recipe container section">
-      <h6>Nuevo platillo</h6>
+  <div class="container grey-text text-lighten-2">
+    <form class="add-order container section">
+      <h6>Detalles de tu Pedido</h6>
       <div class="divider"></div>
+      
       <div class="input-field">
-        <input placeholder="Ejemplo: Pizza" id="title" type="text" class="validate" required>
-        <label for="title">Nombre</label>
+        <input placeholder="Ejemplo: Juan Pérez" id="cliente-nombre" type="text" class="validate" required>
+        <label for="cliente-nombre">Nombre completo</label>
       </div>
+
       <div class="input-field">
-        <input placeholder="Ejemplo: Queso, masa, pepperoni" id="ingredients" type="text" class="validate" required>
-        <label for="ingredients">Ingredientes</label>
+        <input placeholder="Ejemplo: Av. Siempre Viva 123" id="cliente-direccion" type="text" class="validate" required>
+        <label for="cliente-direccion">Dirección de entrega</label>
       </div>
+
       <div class="input-field">
-          <input placeholder="Ejemplo: 150" id="precio" type="number" class="validate" required>
-          <label for="precio">Precio</label>
+        <select id="dish-selector" name="platillo_seleccionado" required>
+          <option value="" disabled selected>Cargando menú...</option>
+        </select>
+        <label for="dish-selector">Selecciona un platillo</label>
       </div>
+
+      <div class="input-field">
+        <input placeholder="Ejemplo: 2" id="cantidad" type="number" class="validate" min="1" required>
+        <label for="cantidad">Cantidad</label>
+      </div>
+
       <div class="input-field center">
-        <button type="submit" class="btn-small">Agregar</button>
+        <button type="submit" class="btn-small">Procesar Pedido</button>
       </div>
-    </form>
+    </form> 
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-analytics.js";
     import { getFirestore } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -76,18 +74,16 @@
       projectId: "fastfood-6a333",
       storageBucket: "fastfood-6a333.firebasestorage.app",
       messagingSenderId: "443865980845",
-      appId: "1:443865980845:web:24afdf0408d9ab41064b24",
-      measurementId: "G-NM70SSTX56"
+      appId: "1:443865980845:web:24afdf0408d9ab41064b24"
     };
 
     const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-    const db = getFirestore(app);
-    
-    window.db = db;
+    window.db = getFirestore(app);
   </script>
 
   <script type="module" src="/js/index.js" defer></script>
   <script type="module" src="/js/db.js" defer></script>
+  
 </body>
+
 </html>

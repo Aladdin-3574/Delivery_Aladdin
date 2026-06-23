@@ -1,8 +1,32 @@
-/**
- * Archivo: index.js
- * Descripción: Inicialización de Materialize y manipulación del DOM.
- * Refactorizado para exportar sus funciones de manera modular.
+
+  /**
+ * @fileoverview Lógica para poblar e inicializar el selector de platillos.
  */
+
+/**
+ * Función para poblar el <select> dinámicamente e inicializar Materialize.
+ * @param {Array<Object>} catalogoPlatillos - Arreglo de platillos extraídos de Firestore.
+ */
+export const inicializarSelectorPedidos = (catalogoPlatillos) => {
+  const selectElement = document.querySelector('#dish-selector');
+  
+  if (!selectElement) return;
+
+  // 1. Limpiamos opciones preexistentes (excepto la opción placeholder)
+  selectElement.innerHTML = '<option value="" disabled selected>Elige tu platillo...</option>';
+
+  // 2. Iteramos sobre el catálogo y construimos las opciones
+
+  catalogoPlatillos.forEach(platillo => {
+    // Usamos el ID de Firebase como 'value' para relacionar el pedido con la base de datos
+
+    const optionHTML = `<option value="${platillo.id}">${platillo.nombre} - $${platillo.precio}</option>`;
+    selectElement.insertAdjacentHTML('beforeend', optionHTML);
+  });
+
+  // 3. CRÍTICO: Inicializamos el componente de Materialize.
+  M.FormSelect.init(selectElement);
+};
 
 document.addEventListener('DOMContentLoaded', function() {
   // Inicialización de menús laterales

@@ -1,98 +1,122 @@
 /**
- * @fileoverview Lógica de base de datos para UberEatsCUDEC.
- * Implementa CRUD (Create, Read, Delete) con Firebase Modular API (v10+).
+ * @fileoverview Lógica de base de datos y orquestación.
  */
 
-// 1. Importamos doc y deleteDoc para la funcionalidad de borrado
 import { collection, onSnapshot, addDoc, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
-
-// 2. Importamos explícitamente las funciones de la UI desde index.js
-import { mostrarPlatillo, actualizarPlatillo, eliminarPlatillo } from "./index.js";
+// CRÍTICO: Asegúrate de importar inicializarSelectorPedidos
+import { mostrarPlatillo, actualizarPlatillo, eliminarPlatillo, inicializarSelectorPedidos } from "./index.js";
 
 /**
  * ============================================================================
- * 1. LECTURA DE DATOS EN TIEMPO REAL (Read)
+ * 1. LECTURA Y ORQUESTACIÓN EN TIEMPO REAL
  * ============================================================================
  */
 onSnapshot(collection(window.db, "platillos"), (coleccion) => {
-  coleccion.docChanges().forEach((registro) => {
-    const data = registro.doc.data();
-    const id = registro.doc.id;
+  // Verificamos en qué página estamos buscando los contenedores
+  const contenedorPlatillos = document.querySelector('.recipes');
+  const selectorPlatillos = document.querySelector('#dish-selector');
 
-    if (registro.type === "added") {
-      mostrarPlatillo(data, id); // Removemos el 3er argumento redundante
-    }
-    if (registro.type === "modified") {
-      actualizarPlatillo(data, id);
-    }
-    if (registro.type === "removed") {
-      eliminarPlatillo(id);
-    }
-  });
+  // Si estamos en pedidos.html, extraemos el catálogo completo y llenamos el select
+  if (selectorPlatillos) {
+    const catalogo = coleccion.docs.map(doc => {
+      return { id: doc.id, ...doc.data() };
+    });
+    inicializarSelectorPedidos(catalogo);
+  }
+
+  // Si estamos en index.html, procesamos los cambios quirúrgicos para pintar las tarjetas
+  if (contenedorPlatillos) {
+    coleccion.docChanges().forEach((registro) => {
+      const data = registro.doc.data();
+      const id = registro.doc.id;
+
+      if (registro.type === "added") mostrarPlatillo(data, id);
+      if (registro.type === "modified") actualizarPlatillo(data, id);
+      if (registro.type === "removed") eliminarPlatillo(id);
+    });
+  }
 });
 
 /**
  * ============================================================================
- * 2. ESCRITURA DE DATOS (Create)
+ * 2. CREACIÓN DE CATÁLOGO (Solo se ejecuta en index.html)
  * ============================================================================
  */
 const formularioAgregar = document.querySelector(".add-recipe");
+// BLINDAJE: Solo agregamos el listener si el formulario existe en la página actual
+if (formularioAgregar) {
+  formularioAgregar.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const platilloNuevo = {
+      nombre: document.querySelector('#title').value,
+      ingredientes: document.querySelector('#ingredients').value,
+      precio: document.querySelector('#precio') ? Number(document.querySelector('#precio').value) : 0
+    };
 
-// Scope correctamente aislado en el nivel superior
-formularioAgregar.addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const platilloNuevo = {
-    nombre: document.querySelector('#title').value,
-    ingredientes: document.querySelector('#ingredients').value,
-    precio: document.querySelector('#precio') ? Number(document.querySelector('#precio').value) : 0
-  };
-
-  try {
-    await addDoc(collection(window.db, "platillos"), platilloNuevo);
-    console.log("Platillo agregado exitosamente a Firestore");
-    formularioAgregar.reset(); 
-    
-    const sideFormInstance = M.Sidenav.getInstance(document.querySelector('#side-form'));
-    if (sideFormInstance) sideFormInstance.close();
-
-  } catch (error) {
-    console.error("Error al agregar el platillo: ", error);
-    alert("Hubo un error al guardar el platillo. Revisa la consola.");
-  }
-});
+    try {
+      await addDoc(collection(window.db, "platillos"), platilloNuevo);
+      formularioAgregar.reset(); 
+      const sideFormInstance = M.Sidenav.getInstance(document.querySelector('#side-form'));
+      if (sideFormInstance) sideFormInstance.close();
+    } catch (error) {
+      console.error("Error al agregar el platillo: ", error);
+    }
+  });
+}
 
 /**
  * ============================================================================
- * 3. ELIMINACIÓN DE DATOS (Delete)
+ * 3. ELIMINACIÓN DE DATOS (Solo se ejecuta en index.html)
  * ============================================================================
  */
-// Corregido: .recipes (con punto) para seleccionar por clase
 const contenedorPlatillos = document.querySelector(".recipes");
-
-// Implementación de Delegación de Eventos en el scope superior
-contenedorPlatillos.addEventListener("click", async (e) => {
-  // Evaluamos que el clic haya sido exactamente en el icono de borrar
-  if (e.target.tagName === "I" && e.target.textContent === "delete_outline") {
-    
-    const id = e.target.getAttribute("data-id");
-    
-    if (id) {
-      const confirmacion = confirm("¿Estás seguro de que deseas eliminar este platillo?");
-      if (confirmacion) {
-        try {
-          // Uso de la API Modular v10+: doc() y deleteDoc()
-          const documentoReferencia = doc(window.db, "platillos", id);
-          await deleteDoc(documentoReferencia);
-          
-          console.log(`[EXITO] Platillo ${id} eliminado de la base de datos.`);
-          // NOTA: NO llamamos a eliminarPlatillo(id) aquí. onSnapshot lo detectará y lo borrará del DOM.
-        } catch (error) {
-          console.error("Error al eliminar el platillo: ", error);
-        }
+if (contenedorPlatillos) {
+  contenedorPlatillos.addEventListener("click", async (e) => {
+    if (e.target.tagName === "I" && e.target.textContent === "delete_outline") {
+      const id = e.target.getAttribute("data-id");
+      if (id) {
+        await deleteDoc(doc(window.db, "platillos", id));
       }
-    } else {
-      console.error("Error: No se encontró el data-id en el icono clickeado.");
-    } 
-  }
-});
+    }
+  });
+}
+
+/**
+ * ============================================================================
+ * 4. PROCESAMIENTO DE PEDIDOS (Solo se ejecuta en pedidos.html)
+ * ============================================================================
+ */
+const formularioPedido = document.querySelector(".add-order");
+// BLINDAJE: Solo agregamos el listener si estamos en pedidos.html
+if (formularioPedido) {
+  formularioPedido.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    // Construimos el objeto del pedido
+    const nuevoPedido = {
+      cliente: document.querySelector('#cliente-nombre').value,
+      direccion: document.querySelector('#cliente-direccion').value,
+      platilloId: document.querySelector('#dish-selector').value,
+      cantidad: Number(document.querySelector('#cantidad').value),
+      fecha: new Date().toISOString(), // Guarda la fecha exacta del servidor
+      estado: "Pendiente"
+    };
+
+    try {
+      // Guardamos en una NUEVA colección llamada "pedidos"
+      await addDoc(collection(window.db, "pedidos"), nuevoPedido);
+      console.log("Pedido generado exitosamente");
+      alert("¡Tu pedido ha sido recibido y está en proceso!");
+      
+      // Reseteamos el formulario
+      formularioPedido.reset();
+      
+      // Reinicializamos el select de Materialize para que regrese al placeholder
+      M.FormSelect.init(document.querySelector('#dish-selector'));
+      
+    } catch (error) {
+      console.error("Error al generar pedido:", error);
+      alert("Hubo un error al procesar tu pedido.");
+    }
+  });
+}
