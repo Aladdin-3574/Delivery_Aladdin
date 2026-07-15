@@ -94,7 +94,6 @@
         <p class="grey-text text-darken-1">Fotografía del platillo:</p>
         
         <div class="input-field center">
-          <!-- CRÍTICO: type="button" para evitar el submit del formulario -->
           <button type="button" id="btnIniciarCamara" class="btn-small waves-effect waves-light blue">
             <i class="material-icons left">camera_alt</i> Activar Cámara
           </button>
@@ -116,6 +115,9 @@
         <div id="salida" class="center">
           <img id="foto" src="" alt="Vista previa del platillo" class="responsive-img photo-preview" style="display:none;">
         </div>
+
+        <!-- Campo oculto para almacenar el payload de la imagen en Base64 -->
+        <input type="hidden" id="imagen-base64">
       </div>
 
       <div class="input-field center" style="margin-top: 2rem;">

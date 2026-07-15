@@ -96,20 +96,35 @@ const inicializarGestionCatalogo = () => {
     formularioAgregar.addEventListener("submit", async (e) => {
       e.preventDefault();
       
-      const precioInput = document.querySelector('#precio');
+      const inputBase64 = document.querySelector('#imagen-base64');
       
-      /** @type {Object} */
       const platilloNuevo = {
         nombre: document.querySelector('#title').value.trim(),
         ingredientes: document.querySelector('#ingredients').value.trim(),
-        precio: precioInput ? parseFloat(precioInput.value) || 0 : 0
+        precio: Number(document.querySelector('#precio').value) || 0,
+       
+        imagen: inputBase64 ? inputBase64.value : null
       };
+
+      // Validación para prevenir campos vacíos
+
+      if (!platilloNuevo.nombre || !platilloNuevo.ingredientes|| !platilloNuevo.precio) {
+        M.toast({ html: 'Por favor, completa nombre, ingredientes y precio.' });
+        return;
+      }
 
       try {
         await addDoc(collection(db, "platillos"), platilloNuevo);
         formularioAgregar.reset(); 
         
-        // Cierre controlado de la UI de Materialize
+       
+        if (inputBase64) inputBase64.value = "";
+        const fotoPreview = document.getElementById('foto');
+        if (fotoPreview) {
+          fotoPreview.src = "";
+          fotoPreview.style.display = "none";
+        }
+
         const sideFormNode = document.querySelector('#side-form');
         if (sideFormNode) {
           M.Sidenav.getInstance(sideFormNode)?.close();
