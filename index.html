@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>FastFood - UberEatsCUDEC</title>
   
@@ -11,81 +11,118 @@
   <link type="text/css" href="/css/styles.css" rel="stylesheet">
   
   <script type="text/javascript" src="/js/materialize.min.js" defer></script>
+
+  <style>
+    /* Clases auxiliares para la interfaz de la cámara */
+    .camera-container {
+      margin-top: 15px;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #000;
+      position: relative;
+    }
+    .camera-feed {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .photo-preview {
+      margin-top: 15px;
+      border-radius: 8px;
+      border: 2px solid #424242;
+    }
+  </style>
 </head>
 <body class="grey darken-4"> 
-  <nav class="z-depth-0">
-    <div class="nav-wrapper container">
-      <a href="/">FastFood</a>
-      <span class="right grey-text text-lighten-2"> 
-        <i class="material-icons sidenav-trigger" data-target="side-menu" role="button" aria-label="Abrir menú lateral">menu</i>
-      </span>
-    </div>
-  </nav>
+  
+  <header>
+    <nav class="z-depth-0 grey darken-4">
+      <div class="nav-wrapper container">
+        <a href="/" class="brand-logo">FastFood</a>
+        <span class="right grey-text text-lighten-2"> 
+          <i class="material-icons sidenav-trigger" data-target="side-menu" role="button" aria-label="Abrir menú lateral">menu</i>
+        </span>
+      </div>
+    </nav>
+  </header>
 
-  <ul id="side-menu" class="sidenav side-menu">
-    <li><a class="subheader">FastFood</a></li>
-    <li><a href="/" class="waves-effect">Inicio</a></li>
-    <li><a href="/pages/about.html" class="waves-effect">Acerca</a></li>
-    <li><a href="/pages/pedidos.html" class="waves-effect">Generar pedido</a></li>
-    <li><div class="divider"></div></li>
-    <li>
-      <a href="/pages/contact.html" class="waves-effect">
-        <i class="material-icons">mail_outline</i>Contacto
-      </a>
-    </li>
-  </ul>
+  <aside>
+    <ul id="side-menu" class="sidenav side-menu grey darken-4">
+      <li><a class="subheader grey-text text-lighten-1">FastFood</a></li>
+      <li><a href="/" class="waves-effect white-text">Inicio</a></li>
+      <li><a href="/pages/about.html" class="waves-effect white-text">Acerca</a></li>
+      <li><a href="/pages/pedidos.html" class="waves-effect white-text">Generar pedido</a></li>
+      <li><div class="divider grey darken-3"></div></li>
+      <li>
+        <a href="/pages/contact.html" class="waves-effect white-text">
+          <i class="material-icons white-text">mail_outline</i>Contacto
+        </a>
+      </li>
+    </ul>
+  </aside>
 
-  <div class="recipes container grey-text text-lighten-2"></div>
+  <main class="recipes container grey-text text-lighten-2"></main>
 
-  <div class="center">
-    <a class="btn-floating btn-small btn-large add-btn sidenav-trigger" data-target="side-form" aria-label="Añadir nuevo platillo">
+  <div class="center" style="margin-top: 2rem;">
+    <a class="btn-floating btn-large waves-effect waves-light red accent-2 sidenav-trigger" data-target="side-form" aria-label="Añadir nuevo platillo">
       <i class="material-icons">add</i>
     </a>
   </div>
 
-  <div id="side-form" class="sidenav side-form">
-    <form class="add-recipe container section">
-      <h6>Nuevo platillo</h6>
-      <div class="divider"></div>
+  <aside id="side-form" class="sidenav side-form grey darken-4 grey-text text-lighten-2">
+    <form class="add-recipe container section" novalidate>
+      <h6 class="white-text">Nuevo platillo</h6>
+      <div class="divider grey darken-3"></div>
+      
       <div class="input-field">
-        <input placeholder="Ejemplo: Pizza" id="title" type="text" class="validate" required>
+        <input placeholder="Ejemplo: Pizza" id="title" type="text" class="validate white-text" required aria-required="true">
         <label for="title">Nombre</label>
       </div>
+      
       <div class="input-field">
-        <input placeholder="Ejemplo: Queso, masa, pepperoni" id="ingredients" type="text" class="validate" required>
+        <input placeholder="Ejemplo: Queso, masa, pepperoni" id="ingredients" type="text" class="validate white-text" required aria-required="true">
         <label for="ingredients">Ingredientes</label>
       </div>
+      
       <div class="input-field">
-          <input placeholder="Ejemplo: 150" id="precio" type="number" class="validate" required>
-          <label for="precio">Precio</label>
+        <input placeholder="Ejemplo: 150" id="precio" type="number" class="validate white-text" required aria-required="true">
+        <label for="precio">Precio</label>
       </div>
-      <div class="input-field center">
-        <button type="submit" class="btn-small">Agregar</button>
+
+      <!-- Módulo de UI de la Cámara -->
+      <div class="section">
+        <p class="grey-text text-darken-1">Fotografía del platillo:</p>
+        
+        <div class="input-field center">
+          <!-- CRÍTICO: type="button" para evitar el submit del formulario -->
+          <button type="button" id="btnIniciarCamara" class="btn-small waves-effect waves-light blue">
+            <i class="material-icons left">camera_alt</i> Activar Cámara
+          </button>
+        </div>
+
+        <div id="camara" class="camera-container" style="display: none;">
+          <!-- playsinline es vital para que funcione en iOS sin abrir el reproductor a pantalla completa -->
+          <video id="video" class="camera-feed" autoplay playsinline>Cámara no disponible</video>
+          
+          <div class="center" style="padding: 10px;">
+            <button type="button" id="btnFoto" class="btn-floating btn-large waves-effect waves-light red">
+              <i class="material-icons">camera</i>
+            </button>
+          </div>
+        </div>
+        
+        <canvas id="canvas" style="display:none;"></canvas>
+        
+        <div id="salida" class="center">
+          <img id="foto" src="" alt="Vista previa del platillo" class="responsive-img photo-preview" style="display:none;">
+        </div>
+      </div>
+
+      <div class="input-field center" style="margin-top: 2rem;">
+        <button type="submit" class="btn-large waves-effect waves-light red accent-2">Agregar Platillo</button>
       </div>
     </form>
-  </div>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-analytics.js";
-    import { getFirestore } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyC3zhixRvn3XictflC58KNHLT2K3yWb0d4",
-      authDomain: "fastfood-6a333.firebaseapp.com",
-      projectId: "fastfood-6a333",
-      storageBucket: "fastfood-6a333.firebasestorage.app",
-      messagingSenderId: "443865980845",
-      appId: "1:443865980845:web:24afdf0408d9ab41064b24",
-      measurementId: "G-NM70SSTX56"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-    const db = getFirestore(app);
-    
-    window.db = db;
-  </script>
+  </aside>
 
   <script type="module" src="/js/index.js" defer></script>
   <script type="module" src="/js/db.js" defer></script>

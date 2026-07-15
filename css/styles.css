@@ -190,3 +190,15 @@ input[type=number]:focus + label,
 form .input-field {
   margin-top: 30px;
 }
+
+/* =========================================
+   Mapa (Leaflet)
+   ========================================= */
+#mapa {
+  height: 300px; /* Altura definida para que el mapa sea visible */
+  width: 100%;
+  margin-top: 20px;
+  border-radius: 8px; /* Bordes redondeados consistentes con .card-panel */
+  box-shadow: 0 2px 5px var(--shadow-medium); /* Sombra para profundidad */
+  z-index: 0; /* Evita que se superponga a otros elementos flotantes */
+}
