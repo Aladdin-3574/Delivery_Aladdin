@@ -8,7 +8,7 @@
   <link type="text/css" href="../css/materialize.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link type="text/css" href="../css/styles.css" rel="stylesheet">
-  <script type="text/javascript" src="../js/materialize.min.js"></script>
+  <script type="text/javascript" src="../js/materialize.min.js" defer></script>
   <link rel="manifest" href="manifest.json">
 
 <meta name="mobile-web-app-capable" content="yes">
@@ -47,41 +47,39 @@
 <link rel="apple-touch-icon" type="image/png" sizes="512x512" href="icon-512x512-maskable.png">
 
 </head>
-<body class="grey lighten-4">
+<body class="grey darken-4">
 
   <!-- top nav -->
-  <nav class="z-depth-0">
+  <nav class="z-depth-0 grey darken-4">
     <div class="nav-wrapper container">
-      <a href="/">Fast<span>Food</span></a>
-      <span class="right grey-text text-darken-1">
-        <i class="material-icons sidenav-trigger" data-target="side-menu">menu</i>
+      <a href="/" class="brand-logo">FastFood</a>
+      <span class="right grey-text text-lighten-2">
+        <i class="material-icons sidenav-trigger" data-target="side-menu" role="button" aria-label="Abrir menú de navegación" tabindex="0">menu</i>
       </span>
     </div>
   </nav>
 
   <!-- side nav -->
-  <ul id="side-menu" class="sidenav side-menu">
-    <li><a class="subheader">FastFood</a></li>
-    <li><a href="../" class="waves-effect">Home</a></li>
-    <li><a href="../pages/about.html" class="waves-effect">About</a></li>
-    <li><a href="../pages/pedidos.html" class="waves-effect">Generar pedido</a></li>
-    <li><div class="divider"></div></li>
-    <li><a href="../pages/contact.html" class="waves-effect">
-      <i class="material-icons">mail_outline</i>Contact</a>
-    </li>
+  <ul id="side-menu" class="sidenav side-menu grey darken-4">
+    <li><a class="subheader grey-text text-lighten-1">FastFood</a></li>
+    <li><a href="/" class="waves-effect white-text">Inicio</a></li>
+    <li><a href="../pages/about.html" class="waves-effect white-text">Acerca</a></li>
+    <li><a href="../pages/pedidos.html" class="waves-effect white-text">Generar pedido</a></li>
+    <li><div class="divider grey darken-3"></div></li>
+    <li><a href="../pages/contact.html" class="waves-effect white-text"><i class="material-icons white-text">mail_outline</i>Contacto</a></li>
   </ul>
 
   <!-- content -->
-  <div class="container grey-text">
-    <h5 class="center">Contact Us</h5>
-    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ducimus, porro voluptatum illum veniam eaque sunt sit labore provident eligendi! Voluptate amet suscipit inventore unde maxime atque impedit officia nobis laboriosam!</p>
-    <div class="divider"></div>
-    <h6>Find us at:</h6>
-    <ul>
-      <li>123 Spicy Noodle Road</li>
-      <li>Manchester, UK</li>
-    </ul>
-  </div>
+  <main class="container grey-text text-lighten-2">
+    <div class="center-align" style="margin-top: 4rem;">
+      <i class="material-icons large red-text text-accent-2">contact_mail</i>
+      <h4 class="white-text">Contáctanos</h4>
+      <p class="grey-text text-lighten-1">
+        Si tienes alguna pregunta o necesitas soporte, no dudes en escribirnos.
+      </p>
+      <p class="flow-text white-text" style="margin-top: 2rem;">soporte@fastfood.com</p>
+    </div>
+  </main>
 
    <script src="../js/index.js" defer></script>
   <script type="module" src="../js/db.js" defer></script>

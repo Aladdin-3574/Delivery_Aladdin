@@ -1,83 +1,139 @@
-<html lang="en">
+<!DOCTYPE html>
+<html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Food Ninja</title>
+  <title>Acerca de - FastFood</title>
+  
   <!-- materialize icons, css & js -->
-  <link type="text/css" href="../css/materialize.min.css" rel="stylesheet">
+  <link type="text/css" href="/css/materialize.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link type="text/css" href="../css/styles.css" rel="stylesheet">
-  <script type="text/javascript" src="../js/materialize.min.js"></script>
-  <link rel="manifest" href="manifest.json">
+  <link type="text/css" href="/css/styles.css" rel="stylesheet">
+  <script type="text/javascript" src="/js/materialize.min.js" defer></script>
+  
+  <link rel="manifest" href="/manifest.json">
 
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="application-name" content="AD">
-<meta name="apple-mobile-web-app-title" content="AD">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Meta tags para PWA y compatibilidad móvil -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="FastFood">
+  <meta name="apple-mobile-web-app-title" content="FastFood">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<link rel="icon" type="image/png" sizes="16x16" href="icon-16x16.png">
-<link rel="apple-touch-icon" type="image/png" sizes="16x16" href="icon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="icon-32x32.png">
-<link rel="apple-touch-icon" type="image/png" sizes="32x32" href="icon-32x32.png">
-<link rel="icon" type="image/png" sizes="48x48" href="icon-48x48.png">
-<link rel="apple-touch-icon" type="image/png" sizes="48x48" href="icon-48x48.png">
-<link rel="icon" type="image/png" sizes="64x64" href="icon-64x64.png">
-<link rel="apple-touch-icon" type="image/png" sizes="64x64" href="icon-64x64.png">
-<link rel="icon" type="image/png" sizes="96x96" href="icon-96x96.png">
-<link rel="apple-touch-icon" type="image/png" sizes="96x96" href="icon-96x96.png">
-<link rel="icon" type="image/png" sizes="128x128" href="icon-128x128.png">
-<link rel="apple-touch-icon" type="image/png" sizes="128x128" href="icon-128x128.png">
-<link rel="icon" type="image/png" sizes="144x144" href="icon-144x144.png">
-<link rel="apple-touch-icon" type="image/png" sizes="144x144" href="icon-144x144.png">
-<link rel="icon" type="image/png" sizes="152x152" href="icon-152x152.png">
-<link rel="apple-touch-icon" type="image/png" sizes="152x152" href="icon-152x152.png">
-<link rel="icon" type="image/png" sizes="180x180" href="icon-180x180.png">
-<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="icon-180x180.png">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192x192.png">
-<link rel="apple-touch-icon" type="image/png" sizes="192x192" href="icon-192x192.png">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192x192-maskable.png">
-<link rel="apple-touch-icon" type="image/png" sizes="192x192" href="icon-192x192-maskable.png">
-<link rel="icon" type="image/png" sizes="384x384" href="icon-384x384.png">
-<link rel="apple-touch-icon" type="image/png" sizes="384x384" href="icon-384x384.png">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512x512.png">
-<link rel="apple-touch-icon" type="image/png" sizes="512x512" href="icon-512x512.png">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512x512-maskable.png">
-<link rel="apple-touch-icon" type="image/png" sizes="512x512" href="icon-512x512-maskable.png">
+  <!-- Iconos PWA -->
+  <link rel="icon" type="image/png" sizes="16x16" href="/icon-16x16.png">
+  <link rel="apple-touch-icon" type="image/png" sizes="16x16" href="/icon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/icon-32x32.png">
+  <link rel="apple-touch-icon" type="image/png" sizes="32x32" href="/icon-32x32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="/icon-48x48.png">
+  <link rel="apple-touch-icon" type="image/png" sizes="48x48" href="/icon-48x48.png">
+  <link rel="icon" type="image/png" sizes="64x64" href="/icon-64x64.png">
+  <link rel="apple-touch-icon" type="image/png" sizes="64x64" href="/icon-64x64.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/icon-96x96.png">
+  <link rel="apple-touch-icon" type="image/png" sizes="96x96" href="/icon-96x96.png">
+  <link rel="icon" type="image/png" sizes="128x128" href="/icon-128x128.png">
+  <link rel="apple-touch-icon" type="image/png" sizes="128x128" href="/icon-128x128.png">
+  <link rel="icon" type="image/png" sizes="144x144" href="/icon-144x144.png">
+  <link rel="apple-touch-icon" type="image/png" sizes="144x144" href="/icon-144x144.png">
+  <link rel="icon" type="image/png" sizes="152x152" href="/icon-152x152.png">
+  <link rel="apple-touch-icon" type="image/png" sizes="152x152" href="/icon-152x152.png">
+  <link rel="icon" type="image/png" sizes="180x180" href="/icon-180x180.png">
+  <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="/icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/icon-192x192.png">
+  <link rel="apple-touch-icon" type="image/png" sizes="192x192" href="/icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/icon-192x192-maskable.png">
+  <link rel="apple-touch-icon" type="image/png" sizes="192x192" href="/icon-192x192-maskable.png">
+  <link rel="icon" type="image/png" sizes="384x384" href="/icon-384x384.png">
+  <link rel="apple-touch-icon" type="image/png" sizes="384x384" href="/icon-384x384.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="/icon-512x512.png">
+  <link rel="apple-touch-icon" type="image/png" sizes="512x512" href="/icon-512x512.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="/icon-512x512-maskable.png">
+  <link rel="apple-touch-icon" type="image/png" sizes="512x512" href="/icon-512x512-maskable.png">
 </head>
-<body class="grey lighten-4">
 
-  <!-- top nav -->
-  <nav class="z-depth-0">
-    <div class="nav-wrapper container">
-      <a href="/">Food<span>Ninja</span></a>
-      <span class="right grey-text text-darken-1">
-        <i class="material-icons sidenav-trigger" data-target="side-menu">menu</i>
-      </span>
+<!-- INVERSIÓN: El body ahora es negro absoluto (black) -->
+<body class="black">
+
+  <!-- TOP NAV -->
+  <header>
+    <!-- INVERSIÓN: El nav ahora es gris oscuro (grey darken-4) -->
+    <nav class="grey darken-4 z-depth-0">
+      <div class="nav-wrapper container">
+        <a href="/" class="brand-logo">FastFood</a>
+        <span class="right grey-text text-lighten-2">
+          <i class="material-icons sidenav-trigger" data-target="side-menu" role="button" aria-label="Abrir menú de navegación" tabindex="0">menu</i>
+        </span>
+      </div>
+    </nav>
+  </header>
+
+  <!-- SIDE NAV -->
+  <aside>
+    <!-- El menú lateral se iguala al color del navbar superior para dar continuidad visual -->
+    <ul id="side-menu" class="sidenav side-menu grey darken-4">
+      <li><a class="subheader grey-text text-lighten-1">FastFood</a></li>
+      <li><a href="/" class="waves-effect white-text">Inicio</a></li>
+      <li><a href="/pages/about.html" class="waves-effect white-text">Acerca</a></li>
+      <li><a href="/pages/pedidos.html" class="waves-effect white-text">Generar pedido</a></li>
+      <li><div class="divider grey darken-3"></div></li>
+      <li>
+        <a href="/pages/contact.html" class="waves-effect white-text">
+          <i class="material-icons white-text">mail_outline</i>Contacto
+        </a>
+      </li>
+    </ul>
+  </aside>
+
+  <!-- CONTENT -->
+  <main class="container grey-text text-lighten-2">
+    <div class="center-align" style="margin-top: 2rem; margin-bottom: 2rem;">
+      <img src="/img/logo.jpg" alt="Logotipo oficial de la aplicación FastFood" class="responsive-img" style="max-width: 150px;">
     </div>
-  </nav>
 
-  <!-- side nav -->
-  <ul id="side-menu" class="sidenav side-menu">
-    <li><a class="subheader">FOODNINJA</a></li>
-    <li><a href="../" class="waves-effect">Home</a></li>
-    <li><a href="../pages/about.html" class="waves-effect">About</a></li>
-    <li><a href="../pages/pedidos.html" class="waves-effect">Generar pedido</a></li>
-    <li><div class="divider"></div></li>
-    <li><a href="/pages/contact.html" class="waves-effect">
-      <i class="material-icons">mail_outline</i>Contact</a>
-    </li>
-  </ul>
+    <!-- INVERSIÓN UI INTERNA: La lista se funde con el negro del body -->
+    <ul class="collection with-header black" style="border-color: #333;">
+      
+      <!-- INVERSIÓN UI INTERNA: El encabezado de la lista hace match con el gris oscuro del Navbar -->
+      <li class="collection-header grey darken-4 white-text" style="border-bottom: 1px solid #333;">
+        <h4>Acerca de la App</h4>
+      </li>
+      
+      <!-- Los items ahora son black para mezclarse elegantemente con el fondo de la pantalla -->
+      <li class="collection-item black white-text" style="border-bottom: 1px solid #333;">
+        <div>
+          <b>Nombre de la App</b>
+          <span class="secondary-content white-text">FastFood</span>
+        </div>
+      </li>
 
-  <!-- content -->
-  <div class="container grey-text">
-    <h5 class="center">About Food Ninja</h5>
-    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ducimus, porro voluptatum illum veniam eaque sunt sit labore provident eligendi! Voluptate amet suscipit inventore unde maxime atque impedit officia nobis laboriosam!</p>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam voluptatibus omnis, ea doloremque exercitationem id necessitatibus. Voluptatem officiis cupiditate commodi totam, hic laborum est ducimus amet iure, non dignissimos illo.</p>
-  </div>
+      <li class="collection-item black white-text" style="border-bottom: 1px solid #333;">
+        <div>
+          <b>Versión</b>
+          <span class="secondary-content white-text">1.0.0</span>
+        </div>
+      </li>
 
-   <script src="/js/index.js" defer></script>
+      <li class="collection-item black white-text" style="border-bottom: 1px solid #333;">
+        <b>Descripción</b>
+        <p class="grey-text text-lighten-1" style="margin-top: 10px;">
+          Esta es una aplicación de pedidos de comida rápida desarrollada como proyecto para la materia de Programación Avanzada. Permite a los usuarios ver un menú de platillos, registrar nuevos productos y generar pedidos especificando su ubicación.
+        </p>
+      </li>
+
+      <li class="collection-item black white-text" style="border-bottom: 1px solid #333;">
+        <div>
+          <b>Soporte y Contacto</b>
+          <a href="/pages/contact.html" class="secondary-content">
+            <i class="material-icons red-text text-accent-2">send</i>
+          </a>
+        </div>
+      </li>
+    </ul>
+  </main>
+
+  <!-- ORQUESTACIÓN DE SCRIPTS -->
+  <script src="/js/index.js" defer></script>
   <script type="module" src="/js/db.js" defer></script>
 </body>
 </html>

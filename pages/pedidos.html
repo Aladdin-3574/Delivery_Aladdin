@@ -2,7 +2,6 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <!-- Configuración de viewport estricta para mitigar auto-zoom indeseado en móviles -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Generar Pedido - FastFood</title>
@@ -14,10 +13,7 @@
   <!-- Fuentes e Iconos -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   
-  <!-- 
-    Leaflet CSS y JS con Subresource Integrity (SRI).
-    Evita la inyección de código malicioso en caso de compromiso del CDN.
-  -->
+  <!-- Leaflet CSS y JS con SRI -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" 
         crossorigin="" />
@@ -25,21 +21,14 @@
           integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" 
           crossorigin=""></script>
 
-  <!-- Script de Materialize deferido -->
   <script type="text/javascript" src="../js/materialize.min.js" defer></script>
 
-  <!-- 
-    Estilos críticos encapsulados. 
-    Idealmente, mueve estas reglas a tu archivo /css/styles.css para cumplir 
-    estrictamente con las políticas CSP (Content Security Policy).
-  -->
   <style>
     :root {
       --map-height: 250px;
       --border-radius-ui: 8px;
     }
     
-    /* Reglas para estabilizar el renderizado de Leaflet */
     .map-wrapper {
       display: none;
       margin-top: 1.5rem;
@@ -51,11 +40,10 @@
       height: var(--map-height);
       width: 100%;
       border-radius: var(--border-radius-ui);
-      z-index: 10; /* Z-index calibrado contra Materialize (.sidenav tiene 1000+) */
+      z-index: 10;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
     }
 
-    /* Ajustes de tipografía y layout */
     .ticket-total {
       color: var(--title, #ff5252);
       font-weight: 700;
@@ -71,41 +59,11 @@
     }
   </style>
   <link rel="manifest" href="manifest.json">
-
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="application-name" content="AD">
-<meta name="apple-mobile-web-app-title" content="AD">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-<link rel="icon" type="image/png" sizes="16x16" href="icon-16x16.png">
-<link rel="apple-touch-icon" type="image/png" sizes="16x16" href="icon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="icon-32x32.png">
-<link rel="apple-touch-icon" type="image/png" sizes="32x32" href="icon-32x32.png">
-<link rel="icon" type="image/png" sizes="48x48" href="icon-48x48.png">
-<link rel="apple-touch-icon" type="image/png" sizes="48x48" href="icon-48x48.png">
-<link rel="icon" type="image/png" sizes="64x64" href="icon-64x64.png">
-<link rel="apple-touch-icon" type="image/png" sizes="64x64" href="icon-64x64.png">
-<link rel="icon" type="image/png" sizes="96x96" href="icon-96x96.png">
-<link rel="apple-touch-icon" type="image/png" sizes="96x96" href="icon-96x96.png">
-<link rel="icon" type="image/png" sizes="128x128" href="icon-128x128.png">
-<link rel="apple-touch-icon" type="image/png" sizes="128x128" href="icon-128x128.png">
-<link rel="icon" type="image/png" sizes="144x144" href="icon-144x144.png">
-<link rel="apple-touch-icon" type="image/png" sizes="144x144" href="icon-144x144.png">
-<link rel="icon" type="image/png" sizes="152x152" href="icon-152x152.png">
-<link rel="apple-touch-icon" type="image/png" sizes="152x152" href="icon-152x152.png">
-<link rel="icon" type="image/png" sizes="180x180" href="icon-180x180.png">
-<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="icon-180x180.png">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192x192.png">
-<link rel="apple-touch-icon" type="image/png" sizes="192x192" href="icon-192x192.png">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192x192-maskable.png">
-<link rel="apple-touch-icon" type="image/png" sizes="192x192" href="icon-192x192-maskable.png">
-<link rel="icon" type="image/png" sizes="384x384" href="icon-384x384.png">
-<link rel="apple-touch-icon" type="image/png" sizes="384x384" href="icon-384x384.png">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512x512.png">
-<link rel="apple-touch-icon" type="image/png" sizes="512x512" href="icon-512x512.png">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512x512-maskable.png">
-<link rel="apple-touch-icon" type="image/png" sizes="512x512" href="icon-512x512-maskable.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="AD">
+  <meta name="apple-mobile-web-app-title" content="AD">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 </head>
 
 <body class="grey darken-4">
@@ -153,7 +111,7 @@
           </button>
         </div>
 
-        <!-- Contenedor del mapa refactorizado -->
+        <!-- Contenedor del mapa -->
         <div id="mapa-container" class="map-wrapper">
           <p class="grey-text text-darken-1"><i class="material-icons tiny">info_outline</i> Verifica tu ubicación en el mapa:</p>
           <div id="mapa" class="map-canvas"></div>
@@ -196,7 +154,7 @@
     </form> 
   </main>
 
-  <!-- Modal de Confirmación -->
+  <!-- Modal de Confirmación y Código QR -->
   <div id="summary-modal" class="modal grey darken-4 grey-text text-lighten-2" role="dialog" aria-modal="true" aria-labelledby="modal-title">
     <div class="modal-content">
       <h4 id="modal-title" class="ticket-total">¡Pedido Confirmado!</h4>
@@ -208,7 +166,14 @@
         <li class="collection-item grey darken-4 modal-ticket-item"><b>Dirección de entrega:</b> <span id="res-direccion" class="white-text"></span></li>
         <li class="collection-item grey darken-4 modal-ticket-item ticket-total"><b>Total a Pagar: $<span id="res-total"></span></b></li>
       </ul>
+
+      <!-- NUEVO: Contenedor céntrico del Código QR para validación del repartidor -->
+      <div class="center-align" style="margin-top: 20px;">
+        <p class="grey-text text-lighten-1" style="font-size: 0.85rem; margin-bottom: 8px;">Código QR de validación para el repartidor:</p>
+        <img id="res-qrcode" src="" alt="QR de Confirmación de Pedido" style="border: 4px solid #fff; border-radius: 8px; width: 150px; height: 150px; display: inline-block;" />
+      </div>
     </div>
+    
     <div class="modal-footer grey darken-4" style="border-top: 1px solid #333;">
       <a href="#!" class="modal-close waves-effect waves-light btn-flat grey-text text-lighten-2">Cerrar y volver</a>
     </div>
@@ -217,6 +182,5 @@
   <!-- Orquestación de Scripts modulares -->
   <script type="module" src="../js/index.js" defer></script>
   <script type="module" src="../js/db.js" defer></script>
-  
 </body>
 </html>

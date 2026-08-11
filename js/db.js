@@ -50,7 +50,6 @@ const inicializarSuscripcionPlatillos = () => {
     const contenedorPlatillos = document.querySelector('.recipes');
     const selectorPlatillos = document.querySelector('#dish-selector');
 
-    // Mapeo dinámico para selector en pedidos.html
     if (selectorPlatillos) {
       const catalogo = coleccion.docs.map(documento => ({ 
         id: documento.id, 
@@ -59,7 +58,6 @@ const inicializarSuscripcionPlatillos = () => {
       inicializarSelectorPedidos(catalogo);
     }
 
-    // Actualización del DOM basada en deltas para index.html
     if (contenedorPlatillos) {
       coleccion.docChanges().forEach((registro) => {
         const data = registro.doc.data();
@@ -102,13 +100,10 @@ const inicializarGestionCatalogo = () => {
         nombre: document.querySelector('#title').value.trim(),
         ingredientes: document.querySelector('#ingredients').value.trim(),
         precio: Number(document.querySelector('#precio').value) || 0,
-       
         imagen: inputBase64 ? inputBase64.value : null
       };
 
-      // Validación para prevenir campos vacíos
-
-      if (!platilloNuevo.nombre || !platilloNuevo.ingredientes|| !platilloNuevo.precio) {
+      if (!platilloNuevo.nombre || !platilloNuevo.ingredientes || !platilloNuevo.precio) {
         M.toast({ html: 'Por favor, completa nombre, ingredientes y precio.' });
         return;
       }
@@ -117,7 +112,6 @@ const inicializarGestionCatalogo = () => {
         await addDoc(collection(db, "platillos"), platilloNuevo);
         formularioAgregar.reset(); 
         
-       
         if (inputBase64) inputBase64.value = "";
         const fotoPreview = document.getElementById('foto');
         if (fotoPreview) {
@@ -135,7 +129,6 @@ const inicializarGestionCatalogo = () => {
     });
   }
 
-  // Delegación de eventos para optimización de memoria (Event Bubbling)
   if (contenedorPlatillos) {
     contenedorPlatillos.addEventListener("click", async (e) => {
       if (e.target.tagName === "I" && e.target.textContent.trim() === "delete_outline") {
@@ -169,10 +162,6 @@ const inicializarGestionPedidos = () => {
   const inputCantidad = document.querySelector('#cantidad');
   const displayResumen = document.querySelector('#total-display');
 
-  /**
-   * Recalcula el monto en tiempo real tras interacción del usuario.
-   * @returns {void}
-   */
   const actualizarTotalReactivo = () => {
     if (!selectPlatillo || !inputCantidad) return;
     
@@ -188,7 +177,6 @@ const inicializarGestionPedidos = () => {
   selectPlatillo?.addEventListener('change', actualizarTotalReactivo);
   inputCantidad?.addEventListener('input', actualizarTotalReactivo);
 
-  // Inicialización de la API del mapa
   inicializarMapaConUbicacion('btnUbicacion', 'mapa', 'cliente-direccion');
 
   formularioPedido.addEventListener('submit', async (e) => {
@@ -215,7 +203,7 @@ const inicializarGestionPedidos = () => {
       // 1. Escritura asíncrona en Firestore
       await addDoc(collection(db, "pedidos"), nuevoPedido);
       
-      // 2. Inyección de datos en el DOM para el ticket
+      // 2. Mapeo e inyección de datos textuales en el ticket del modal
       const mapeoResumen = {
         '#res-nombre': nuevoPedido.cliente,
         '#res-platillo': nuevoPedido.nombrePlatillo,
@@ -229,12 +217,21 @@ const inicializarGestionPedidos = () => {
         if (nodo) nodo.textContent = valor;
       });
 
-      // 3. Despliegue de modal confirmatorio
+      // 3. Generación y renderizado dinámico del Código QR con los datos del pedido
+      const datosQrTexto = `FastFood-Pedido\nCliente: ${nuevoPedido.cliente}\nPlatillo: ${nuevoPedido.nombrePlatillo}\nCantidad: ${nuevoPedido.cantidad}\nTotal: $${nuevoPedido.totalFacturado.toFixed(2)}\nDirección: ${nuevoPedido.direccion}`;
+      
+      const qrImagenNode = document.querySelector('#res-qrcode');
+      if (qrImagenNode) {
+        const urlApiQr = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(datosQrTexto)}`;
+        qrImagenNode.src = urlApiQr;
+      }
+
+      // 4. Apertura controlada de la ventana modal de Materialize
       if (modalResumen) {
         M.Modal.getInstance(modalResumen)?.open();
       }
       
-      // 4. Limpieza del estado local
+      // 5. Ciclo de limpieza del formulario local
       formularioPedido.reset();
       if (selectPlatillo) M.FormSelect.init(selectPlatillo);
       actualizarTotalReactivo(); 
