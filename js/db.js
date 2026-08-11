@@ -217,14 +217,8 @@ const inicializarGestionPedidos = () => {
         if (nodo) nodo.textContent = valor;
       });
 
-      // 3. Generación y renderizado dinámico del Código QR con los datos del pedido
-      const datosQrTexto = `FastFood-Pedido\nCliente: ${nuevoPedido.cliente}\nPlatillo: ${nuevoPedido.nombrePlatillo}\nCantidad: ${nuevoPedido.cantidad}\nTotal: $${nuevoPedido.totalFacturado.toFixed(2)}\nDirección: ${nuevoPedido.direccion}`;
-      
-      const qrImagenNode = document.querySelector('#res-qrcode');
-      if (qrImagenNode) {
-        const urlApiQr = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(datosQrTexto)}`;
-        qrImagenNode.src = urlApiQr;
-      }
+      // 3. Generación y renderizado del Código QR a través de una función dedicada
+      generarYRenderizarQR(nuevoPedido);
 
       // 4. Apertura controlada de la ventana modal de Materialize
       if (modalResumen) {
@@ -241,6 +235,26 @@ const inicializarGestionPedidos = () => {
       alert("Error crítico en la red. Intenta de nuevo.");
     }
   });
+};
+
+/**
+ * Construye la URL de la API de QR y la asigna al elemento de imagen en el modal.
+ * @param {Object} pedido - El objeto del pedido con todos sus detalles.
+ */
+const generarYRenderizarQR = (pedido) => {
+  const datosQrTexto = `FastFood-Pedido\nCliente: ${pedido.cliente}\nPlatillo: ${pedido.nombrePlatillo}\nCantidad: ${pedido.cantidad}\nTotal: $${pedido.totalFacturado.toFixed(2)}\nDirección: ${pedido.direccion}`;
+      const qrImagenNode = document.querySelector('#res-qrcode');
+      if (qrImagenNode) {
+        const urlApiQr = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(datosQrTexto)}`;
+        qrImagenNode.src = urlApiQr;
+        qrImagenNode.onerror = () => {
+          console.error("No se pudo cargar la imagen del código QR desde la API.");
+          qrImagenNode.style.display = 'none'; // Oculta el QR si falla
+        };
+        qrImagenNode.onload = () => {
+          qrImagenNode.style.display = 'inline-block'; // Asegura que sea visible si carga bien
+        };
+      }
 };
 
 // Bootstrap de la aplicación modular
