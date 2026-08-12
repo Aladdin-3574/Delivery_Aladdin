@@ -316,3 +316,22 @@ export const inicializarMapaConUbicacion = (idBoton, idContenedorMapa, idInputDi
     });
   });
 };
+
+/**
+ * Registra el Service Worker en el cliente.
+ * @function initServiceWorker
+ */
+const initServiceWorker = async () => {
+  if ('serviceWorker' in navigator) {
+    try {
+      const registration = await navigator.serviceWorker.register('/sw.js');
+      console.log('[App] SW registrado correctamente. Scope:', registration.scope);
+    } catch (error) {
+      console.error('[App] Error al registrar el SW:', error);
+    }
+  }
+};
+
+window.addEventListener('load', () => {
+  initServiceWorker();
+});
