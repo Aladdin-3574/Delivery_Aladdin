@@ -332,6 +332,33 @@ const initServiceWorker = async () => {
   }
 };
 
+/**
+ * ============================================================================
+ * 6. LÓGICA DE INSTALACIÓN DE LA PWA
+ * ============================================================================
+ */
+
+let deferredInstallPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  // Previene que el navegador muestre la mini-barra de instalación por defecto
+  e.preventDefault();
+  // Almacena el evento para poder mostrar el prompt cuando queramos
+  deferredInstallPrompt = e;
+  console.log('[App] Evento de instalación capturado y listo para ser usado.');
+
+  // Mostramos el prompt de instalación inmediatamente.
+  // Esto es lo más cercano a "en cuanto abran la app" que las políticas del navegador permiten.
+  deferredInstallPrompt.prompt();
+
+  // Esperamos la respuesta del usuario
+  deferredInstallPrompt.userChoice.then((choiceResult) => {
+    const outcome = choiceResult.outcome === 'accepted' ? 'aceptó' : 'rechazó';
+    console.log(`El usuario ${outcome} la instalación de la PWA`);
+    deferredInstallPrompt = null;
+  });
+});
+
 window.addEventListener('load', () => {
   initServiceWorker();
 });
