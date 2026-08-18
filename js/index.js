@@ -1,7 +1,7 @@
 /**
  * @fileoverview index.js - Módulo de interfaz y utilidades.
  * Gestiona la manipulación reactiva del DOM, inicialización de componentes de Materialize,
- * orquestación del mapa de Leaflet y control periférico estricto (cámara).
+ * orquestación del mapa de Leaflet, control periférico estricto (cámara) y ciclo de vida PWA.
  */
 
 let mapaInstancia = null;
@@ -186,7 +186,6 @@ export const inicializarSelectorPedidos = (catalogoPlatillos) => {
  * @param {string} id - UUID del documento.
  */
 export function mostrarPlatillo(platillo, id) {
-  // Renderizado condicional: Prioriza la imagen Base64, de lo contrario usa el icono
   const renderVisual = platillo.imagen 
     ? `<img src="${platillo.imagen}" alt="${platillo.nombre}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px;">`
     : `<i class="material-icons">fastfood</i>`;
@@ -223,7 +222,6 @@ export function actualizarPlatillo(platillo, id) {
     card.querySelector('.recipe-ingredients').textContent = `#Ingredientes: ${platillo.ingredientes}`;
     card.querySelector('.recipe-price').textContent = `#Precio: $${platillo.precio}`;
     
-    // Actualización reactiva de la imagen si se modificó
     const placeholder = card.querySelector('.recipe-image-placeholder');
     if (placeholder) {
       placeholder.innerHTML = platillo.imagen 
@@ -334,31 +332,51 @@ const initServiceWorker = async () => {
 
 /**
  * ============================================================================
- * 6. LÓGICA DE INSTALACIÓN DE LA PWA
+ * 6. LÓGICA DE INSTALACIÓN DE LA PWA Y EVENTOS GLOBALES
  * ============================================================================
  */
+let deferredInstallPrompt = null;
 
-let deferredInstallPrompt;
-
-window.addEventListener('beforeinstallprompt', (e) => {
-  // Previene que el navegador muestre la mini-barra de instalación por defecto
-  e.preventDefault();
-  // Almacena el evento para poder mostrar el prompt cuando queramos
-  deferredInstallPrompt = e;
-  console.log('[App] Evento de instalación capturado y listo para ser usado.');
-
-  // Mostramos el prompt de instalación inmediatamente.
-  // Esto es lo más cercano a "en cuanto abran la app" que las políticas del navegador permiten.
-  deferredInstallPrompt.prompt();
-
-  // Esperamos la respuesta del usuario
-  deferredInstallPrompt.userChoice.then((choiceResult) => {
-    const outcome = choiceResult.outcome === 'accepted' ? 'aceptó' : 'rechazó';
-    console.log(`El usuario ${outcome} la instalación de la PWA`);
-    deferredInstallPrompt = null;
+/**
+ * Despliega un componente Toast interactivo solicitando la instalación.
+ * Cumple con el requisito de "Transient User Activation" del navegador.
+ */
+const mostrarBotonInstalacion = () => {
+  // Construcción del template literal para el Toast
+  const toastHTML = `
+    <span>¿Deseas instalar FastFood para una mejor experiencia?</span>
+    <button class="btn-flat toast-action" id="btn-instalar-pwa" style="color: #ff5252; font-weight: bold;">INSTALAR</button>
+  `;
+  
+  M.toast({ 
+    html: toastHTML, 
+    displayLength: 15000, // Tiempo extendido para permitir lectura
+    classes: 'rounded black'
   });
-});
 
-window.addEventListener('load', () => {
-  initServiceWorker();
-});
+  const btnInstalar = document.getElementById('btn-instalar-pwa');
+  
+  if (btnInstalar) {
+    btnInstalar.addEventListener('click', async () => {
+      if (!deferredInstallPrompt) return;
+
+      // 1. Ocultamos el Toast inmediatamente para dar un feedback limpio
+      const toastElement = btnInstalar.closest('.toast');
+      if (toastElement) {
+        M.Toast.getInstance(toastElement).dismiss();
+      }
+
+      // 2. Ejecutamos el prompt nativo amparados bajo el click del usuario
+      deferredInstallPrompt.prompt();
+
+      // 3. Resolvemos la promesa para capturar telemetría local
+      const { outcome } = await deferredInstallPrompt.userChoice;
+      console.log(`[PWA] El usuario ${outcome === 'accepted' ? 'aceptó' : 'rechazó'} la instalación.`);
+      
+      // 4. Liberamos la referencia del objeto recolector de basura (solo se usa 1 vez)
+      deferredInstallPrompt = null;
+    });
+  }
+};
+
+// Captura silenc
