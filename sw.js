@@ -1,32 +1,31 @@
 /**
  * @fileoverview Service Worker principal para la PWA de FastFood.
- * @version 2.0.0
+ * @version 3.0.0
  */
 
 /** @const {string} CACHE_NAME - Identificador de la caché para recursos estáticos. */
-const CACHE_NAME = 'fastfood-static-v2';
+const CACHE_NAME = 'fastfood-static-v3';
 
 /** @const {string} DATA_CACHE_NAME - Identificador de la caché para peticiones de red/API. */
-const DATA_CACHE_NAME = 'fastfood-data-v2';
+const DATA_CACHE_NAME = 'fastfood-data-v3';
 
-/** 
- * @const {Array<string>} ASSETS_TO_CACHE - Rutas exactas del App Shell según el árbol de directorios. 
+/** * @const {Array<string>} ASSETS_TO_CACHE - Rutas relativas del App Shell para entornos con subdirectorios (GitHub Pages). 
  */
 const ASSETS_TO_CACHE = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/css/styles.css',
-  '/css/materialize.min.css',
-  '/js/index.js',
-  '/js/db.js',
-  '/js/materialize.min.js',
-  '/icons/icon-192x192.png',
-  '/icons/icon-512x512.png',
-  '/img/logo.jpg',
-  '/pages/about.html',
-  '/pages/contact.html',
-  '/pages/pedidos.html'
+  './',
+  './index.html',
+  './manifest.json',
+  './css/styles.css',
+  './css/materialize.min.css',
+  './js/index.js',
+  './js/db.js',
+  './js/materialize.min.js',
+  './icons/icon-192x192.png',
+  './icons/icon-512x512.png',
+  './img/logo.jpg',
+  './pages/about.html',
+  './pages/contact.html',
+  './pages/pedidos.html'
 ];
 
 /**
